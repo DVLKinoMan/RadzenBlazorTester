@@ -1,0 +1,28 @@
+﻿@page "/DataGridTester" 
+
+<RadzenDataGrid AllowGrouping="true"  Data="@customers" TItem="Customer"  AllowSorting="true" AllowMultiColumnSorting="true"
+                AllowPaging="true" PageSize="5"
+                AllowFiltering="true" FilterMode="FilterMode.Advanced" LogicalFilterOperator="LogicalFilterOperator.Or" >
+    <Columns>
+        <RadzenDataGridColumn TItem="Customer" Property="CustomerID" Title="Customer ID" />
+        <RadzenDataGridColumn TItem="Customer" Property="CompanyName" Title="Company Name" />
+        <RadzenDataGridColumn TItem="Customer" Property="ContactName" Title="Contact Name" />
+    </Columns>
+</RadzenDataGrid>
+@code {
+    IEnumerable<Customer> customers;
+    IEnumerable<Customer> DbCustomers = new List<Customer>(){
+            new Customer{ CompanyName = "Alta", Name = "George"},
+            new Customer{ CompanyName = "Netium", Name = "David"},
+            new Customer{ CompanyName = "Barcelona", Name = "David"},
+            new Customer{ CompanyName = "Manchester", Name = "Koba"},
+            new Customer{ CompanyName = "Warner Brothers", Name = "David"},
+            new Customer{ CompanyName = "Universal", Name = "Lasha"},
+            new Customer{ CompanyName = "TestCompany", Name = "Kaxa"},
+    };
+
+    protected override void OnInitialized()
+    {
+        customers = DbCustomers;
+    }
+}
