@@ -1,0 +1,25 @@
+﻿@page "/checkboxtester"
+
+<RadzenCheckBoxList @bind-Value=@values TValue="int" Change=@OnChange>
+    <Items>
+        <RadzenCheckBoxListItem Text="Orders" Value="1" />
+        <RadzenCheckBoxListItem Text="Employees" Value="2" />
+        <RadzenCheckBoxListItem Text="Customers" Value="3" />
+    </Items>
+</RadzenCheckBoxList>
+
+<RadzenColorPicker @bind-Value=@color Change=@OnChange />
+@code {
+    IEnumerable<int> values = new int[] { 1 };
+    string color = "rgb(68, 58, 110)";
+
+    void OnChange(IEnumerable<int> value)
+    {
+        Console.WriteLine($"Value changed to {string.Join(", ", value)}");
+    }
+
+    void OnChange(string value)
+    {
+        Console.WriteLine($"Value changed to {value}");
+    }
+}
