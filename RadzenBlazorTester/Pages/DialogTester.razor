@@ -1,0 +1,63 @@
+﻿@inject DialogService DialogService
+@page "/dialogTester"
+
+<RadzenButton Text="Show dialog with inline Blazor content" Click=@ShowInlineDialog />
+<RadzenButton Text="Open FetchData Page as Dialog" Click="@ShowFetchDataDialog" />
+<RadzenButton Text="Show confirm dialog" Click=@(args => DialogService.Confirm("Are you sure?", "MyTitle",
+                                                 new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" })) />
+<RadzenButton Text="Show busy dialog with string" Click="@(args => ShowBusyDialog(true))" />
+<RadzenButton Text="Show busy dialog with markup" Click=@(args => ShowBusyDialog(false)) />
+
+@code {
+    int orderID;
+    async Task ShowInlineDialog()
+    {
+        var result = await DialogService.OpenAsync("Simple Dialog", ds =>
+    @<div>
+        <p Style="margin-bottom: 1rem">Confirm?</p>
+        <div class="row">
+            <div class="col-md-12">
+                <RadzenButton Text="Ok" Click="() => ds.Close(true)" Style="margin-bottom: 10px; width: 150px" />
+                <RadzenButton Text="Cancel" Click="() => ds.Close(false)" ButtonStyle="ButtonStyle.Secondary" Style="margin-bottom: 10px; width: 150px" />
+                <RadzenButton Text="Refresh" Click="(() => { orderID = 10249; ds.Refresh(); })" ButtonStyle="ButtonStyle.Info" Style="margin-bottom: 10px; width: 150px" />
+                Order ID: @orderID
+            </div>
+        </div>
+    </div>);
+
+        Console.WriteLine($"Dialog result: {result}");
+    }
+
+    async Task ShowFetchDataDialog()
+    {
+        await DialogService.OpenAsync<FetchData>("Fetch Data as Dialog", null,
+            new DialogOptions() { Width = "700px", Height = "530px", Resizable = true, Draggable = true });
+    }
+
+    async Task ShowBusyDialog(bool withMessageAsString)
+    {
+        InvokeAsync(async () =>
+        {
+            await Task.Delay(2000);
+
+            DialogService.Close();
+        });
+
+        if (withMessageAsString)
+            await BusyDialog("Busy ...");
+        else
+            await BusyDialog(null);
+    }
+
+async Task BusyDialog(string s)
+    {
+        await DialogService.OpenAsync("", ds=>
+            @<div>
+    <div class="row">
+        <div class="col-md-12">
+            Loading...
+        </div>
+    </div>
+    </div>, new DialogOptions(){ShowTitle = false, Style = "min-height:auto;min-width:auto;width:auto" });
+    }
+}
