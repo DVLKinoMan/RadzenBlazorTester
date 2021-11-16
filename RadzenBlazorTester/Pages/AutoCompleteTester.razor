@@ -1,0 +1,32 @@
+﻿@page "/autocompletetester"
+
+<RadzenAutoComplete Data="@customers" TextProperty="CompanyName" Change="@OnChange" />
+<RadzenAutoComplete Data="@customers" TextProperty="CompanyName" Change="@OnChange" LoadData=@OnLoadData />
+
+@code {
+    IEnumerable<Customer> customers;
+    IEnumerable<Customer> DbCustomers = new List<Customer>(){
+            new Customer{ CompanyName = "Alta", Name = "George"},
+            new Customer{ CompanyName = "Netium", Name = "David"},
+            new Customer{ CompanyName = "Barcelona", Name = "David"},
+            new Customer{ CompanyName = "Manchester", Name = "Koba"},
+            new Customer{ CompanyName = "Warner Brothers", Name = "David"},
+            new Customer{ CompanyName = "Universal", Name = "Lasha"},
+            new Customer{ CompanyName = "TestCompany", Name = "Kaxa"},
+    };
+
+    void OnChange(object value)
+    {
+        Console.WriteLine($"Value changed to {value}");
+    }
+
+    void OnLoadData(LoadDataArgs args)
+    {
+        Console.WriteLine($"LoadData with filter: {args.Filter}");
+
+        customers = DbCustomers.Where(c => c.CompanyName.Contains(args.Filter)
+        || c.Name.Contains(args.Filter)).ToList();
+
+        InvokeAsync(StateHasChanged);
+    }
+}
