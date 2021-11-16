@@ -1,0 +1,39 @@
+﻿@page "/DataListTester"
+
+<RadzenDataList WrapItems="true" AllowPaging="true" Data="@customers" TItem="Customer">
+    <Template Context="order">
+        <div>Company:</div>
+        <b>@order.CompanyName</b>
+    </Template>
+</RadzenDataList>
+<RadzenPager Count="count" PageSize="@pageSize" PageNumbersCount="10" PageChanged="@PageChanged" />
+
+@code {
+    int pageSize = 4;
+    int count;
+    IEnumerable<Customer> customers;
+    IEnumerable<Customer> DbCustomers = new List<Customer>(){
+            new Customer{ CompanyName = "Alta", Name = "George"},
+            new Customer{ CompanyName = "Netium", Name = "David"},
+            new Customer{ CompanyName = "Barcelona", Name = "David"},
+            new Customer{ CompanyName = "Manchester", Name = "Koba"},
+            new Customer{ CompanyName = "Warner Brothers", Name = "David"},
+            new Customer{ CompanyName = "Universal", Name = "Lasha"},
+            new Customer{ CompanyName = "TestCompany", Name = "Kaxa"},
+    };
+
+    protected override void OnInitialized()
+    {
+        customers = DbCustomers.Take(pageSize);
+    }
+
+    void PageChanged(PagerEventArgs args)
+    {
+        customers = GetCustomers(args.Skip, args.Top);
+    }
+
+    IEnumerable<Customer> GetCustomers(int skip, int take)
+    {
+        return DbCustomers.Skip(skip).Take(take).ToList();
+    }
+}
