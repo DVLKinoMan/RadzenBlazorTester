@@ -1,0 +1,71 @@
+﻿@page "/ArcGaugeTester"
+<input type="number" min="1" @bind="Tick" id="tick"/>
+<label for="tick">Speed</label>
+
+<RadzenArcGauge Style="width: 300px; height: 300px">
+    <RadzenArcGaugeScale>
+        <RadzenArcGaugeScaleValue Value="@Value" />
+    </RadzenArcGaugeScale>
+</RadzenArcGauge>
+
+<RadzenArcGauge Style="width: 300px; height: 300px">
+    <RadzenArcGaugeScale Min="100" Max="1000" Step="100">
+        <RadzenArcGaugeScaleValue Value="@Value" />
+    </RadzenArcGaugeScale>
+</RadzenArcGauge>
+
+<RadzenArcGauge Style="width: 300px; height: 300px">
+    <RadzenArcGaugeScale TickPosition="GaugeTickPosition.Outside" MinorStep="5">
+        <RadzenArcGaugeScaleValue Value="@Value" />
+    </RadzenArcGaugeScale>
+</RadzenArcGauge>
+
+<RadzenArcGauge>
+    <RadzenArcGaugeScale StartAngle="0" EndAngle="360">
+        <RadzenArcGaugeScaleValue Value="@Value" />
+    </RadzenArcGaugeScale>
+</RadzenArcGauge>
+
+<RadzenArcGauge Style="width: 300px; height: 300px">
+    <RadzenArcGaugeScale Formatter=@(value => value.ToString())>
+        <RadzenArcGaugeScaleValue Value="@Value" />
+    </RadzenArcGaugeScale>
+</RadzenArcGauge>
+
+<RadzenArcGauge Style="width: 300px; height: 300px">
+    <RadzenArcGaugeScale Y="1">
+        <RadzenArcGaugeScaleValue Value="@Value" />
+    </RadzenArcGaugeScale>
+</RadzenArcGauge>
+
+<RadzenArcGauge Style="width: 300px; height: 300px">
+    <RadzenArcGaugeScale Radius="0.5">
+        <RadzenArcGaugeScaleValue Value="@Value" />
+    </RadzenArcGaugeScale>
+</RadzenArcGauge>
+
+<RadzenArcGauge>
+    <RadzenArcGaugeScale>
+        <RadzenArcGaugeScaleValue Value="@Value" ShowValue="false" />
+    </RadzenArcGaugeScale>
+</RadzenArcGauge>
+
+@code {
+    int Value = 0;
+    int Tick = 1;
+
+    protected override void OnInitialized()
+    {
+        InvokeAsync(async () =>
+        {
+            while (true)
+            {
+                await Task.Delay(1000/Tick);
+                if (Value == 100)
+                    Value = 0;
+                else Value++;
+                StateHasChanged();
+            }
+        });
+    }
+}
